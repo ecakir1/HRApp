@@ -40,6 +40,9 @@ namespace HRApp.Controllers
                 var result = await _userManager.CreateAsync(employee, model.Password);
                 if (result.Succeeded)
                 {
+                    // Yeni kullanıcıyı otomatik olarak "Employee" rolüne atayın
+                    await _userManager.AddToRoleAsync(employee, "Employee");
+
                     ViewBag.RegistrationSuccess = true;
                     return View();
                 }
@@ -56,20 +59,20 @@ namespace HRApp.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                
+
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
-                
+
 
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
                 if (result.Succeeded)
@@ -101,10 +104,6 @@ namespace HRApp.Controllers
             }
             return View(model);
         }
-
-        
-
-
 
         [HttpPost]
         public async Task<IActionResult> Logout()

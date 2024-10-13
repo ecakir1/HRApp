@@ -1,0 +1,24 @@
+﻿@model IEnumerable<DAL.Models.Employee>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    <form asp-action="PromoteToExecutive" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-primary">Promote to Executive</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
