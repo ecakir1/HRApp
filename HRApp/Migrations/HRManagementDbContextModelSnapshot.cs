@@ -70,6 +70,9 @@ namespace HRApp.Migrations
                     b.Property<Guid>("AdminID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ApplicantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime2");
 
@@ -95,6 +98,8 @@ namespace HRApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("CompanyId");
+
+                    b.HasIndex("ApplicantId");
 
                     b.ToTable("Companies", (string)null);
                 });
@@ -673,6 +678,17 @@ namespace HRApp.Migrations
                         .IsRequired();
 
                     b.Navigation("EmployeeDetail");
+                });
+
+            modelBuilder.Entity("DAL.Models.Company", b =>
+                {
+                    b.HasOne("DAL.Models.Employee", "Applicant")
+                        .WithMany()
+                        .HasForeignKey("ApplicantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Applicant");
                 });
 
             modelBuilder.Entity("DAL.Models.CompanyHoliday", b =>

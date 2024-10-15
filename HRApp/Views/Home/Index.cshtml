@@ -1,18 +1,29 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<DAL.Models.Employee> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
+    var user = UserManager.GetUserAsync(User).Result;
+    var roles = user != null ? UserManager.GetRolesAsync(user).Result : new List<string>();
 }
 
 <h2>Welcome to HRApp</h2>
 
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated && roles.Contains("Employee"))
 {
     <p>
         <a asp-action="CompanyForm" class="btn btn-primary">Fill Company Information</a>
     </p>
 }
-else
+else if (!User.Identity.IsAuthenticated)
 {
     <p>
         Please <a asp-action="Login" asp-controller="Account">login</a> to fill company information.
+    </p>
+}
+else
+{
+    <p>
+        You do not have permission to fill company information.
     </p>
 }

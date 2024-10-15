@@ -10,11 +10,14 @@ namespace HRApp.DAL.Seed_Data
     {
         public static async Task SeedRolesAndAdminUser(RoleManager<IdentityRole<Guid>> roleManager, UserManager<Employee> userManager)
         {
-            // Admin rolünü ekleyin
-            var adminRole = "Admin";
-            if (!await roleManager.RoleExistsAsync(adminRole))
+            // Gerekli rolleri ekleyin
+            string[] roleNames = { "Admin", "Employee", "Company Executive" };
+            foreach (var roleName in roleNames)
             {
-                await roleManager.CreateAsync(new IdentityRole<Guid> { Name = adminRole });
+                if (!await roleManager.RoleExistsAsync(roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole<Guid> { Name = roleName });
+                }
             }
 
             // Admin kullanıcısını ekleyin
@@ -30,7 +33,7 @@ namespace HRApp.DAL.Seed_Data
                 var result = await userManager.CreateAsync(adminUser, "Admin@123");
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(adminUser, adminRole);
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
             }
         }

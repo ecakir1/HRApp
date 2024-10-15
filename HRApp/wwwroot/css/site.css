@@ -20,3 +20,14 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}

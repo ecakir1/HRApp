@@ -24,8 +24,14 @@ namespace HRApp.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return RedirectToAction("Applications", "Admin");
+            }
+
             return View();
         }
 
@@ -47,12 +53,10 @@ namespace HRApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Admin kullanýcýsýný veritabanýndan çekin
-                var adminUser = await _userManager.GetUsersInRoleAsync("Admin");
-                var admin = adminUser.FirstOrDefault();
-                if (admin == null)
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
                 {
-                    ModelState.AddModelError("", "Admin user not found.");
+                    ModelState.AddModelError("", "User not found.");
                     return View(model);
                 }
 
@@ -63,11 +67,11 @@ namespace HRApp.Controllers
                     Address = model.Address,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    AdminID = admin.Id
+                    ApplicantId = user.Id
                 };
 
                 _context.Companies.Add(company);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 ViewBag.Message = "Application Submitted!";
                 return View();
