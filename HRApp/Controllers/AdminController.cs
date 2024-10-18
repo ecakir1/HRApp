@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using DAL.Core;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using HRApp.Models;
 
 namespace HRApp.Controllers
 {
@@ -57,6 +58,10 @@ namespace HRApp.Controllers
                 var roles = await _userManager.GetRolesAsync(company.Applicant);
                 model.Add(new CompanyViewModel
                 {
+                    Name = company.Name,
+                    Address = company.Address,
+                    Email = company.Email,
+                    PhoneNumber = company.PhoneNumber,
                     Company = company,
                     ApplicantRoles = roles
                 });
@@ -86,15 +91,5 @@ namespace HRApp.Controllers
 
             return RedirectToAction("Applications");
         }
-    }
-
-    public class CompanyViewModel
-    {
-        public Company Company { get; set; }
-        public IList<string> ApplicantRoles { get; set; }
-        public string Name { get; internal set; }
-        public string Address { get; internal set; }
-        public string Email { get; internal set; }
-        public string PhoneNumber { get; internal set; }
     }
 }

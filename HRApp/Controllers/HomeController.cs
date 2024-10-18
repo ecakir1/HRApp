@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using DAL.Core;
 using Microsoft.AspNetCore.Authorization;
 
+
 namespace HRApp.Controllers
 {
     public class HomeController : Controller
@@ -51,8 +52,34 @@ namespace HRApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CompanyForm(CompanyViewModel model)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
+                ModelState.AddModelError("", "User not found.");
+                return View(model);
+            }
+
+            var company = new Company
+            {
+                CompanyId = Guid.NewGuid(),
+                Name = model.Name,
+                Address = model.Address,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                ApplicantId = user.Id
+            };
+
+            _context.Companies.Add(company);
+            await _context.SaveChangesAsync();
+
+            ViewBag.Message = "Application Submitted!";
+            return View();
+
+
+
+            /*
+            //if (ModelState.IsValid)
+            //{
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
@@ -75,9 +102,10 @@ namespace HRApp.Controllers
 
                 ViewBag.Message = "Application Submitted!";
                 return View();
-            }
+            //}
 
-            return View(model);
+            //return View(model);
+            */
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

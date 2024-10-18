@@ -1,0 +1,31 @@
+﻿@model HRApp.Models.SendInvitationViewModel
+
+@{
+    ViewData["Title"] = "Send Invitation";
+}
+
+<h2>Send Invitation</h2>
+
+<form asp-action="SendInvitation" method="post">
+    <div class="form-group">
+        <label asp-for="Emails" class="control-label"></label>
+        <input asp-for="Emails" class="form-control" />
+        <span asp-validation-for="Emails" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Send" class="btn btn-primary" />
+    </div>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+    </div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

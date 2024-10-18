@@ -27,10 +27,10 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        @if (Context.Session.GetString("Username") != null)
+                        @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <span class="nav-link text-dark">Hello @Context.Session.GetString("Username")!</span>
+                                <span class="nav-link text-dark">Hello @User.Identity.Name!</span>
                             </li>
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
