@@ -6,7 +6,6 @@
     <title>@ViewData["Title"] - HRApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HRApp.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -25,6 +24,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Company Executive"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Management" asp-action="Index">Management</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)

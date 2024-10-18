@@ -1,6 +1,7 @@
 using DAL.Core;
 using DAL.Models;
 using HRApp.DAL.Seed_Data;
+using HRApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -9,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register the IEmailSender service
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddDbContext<HRManagementDbContext>(options =>
 {

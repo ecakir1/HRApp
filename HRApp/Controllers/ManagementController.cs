@@ -9,11 +9,11 @@ using HRApp.Models;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using HRApp.Services;
-//using GSF.Security.Cryptography;
+using GSF.Security.Cryptography;
 
 namespace HRApp.Controllers
 {
-    [Authorize(Roles = "CompanyExecutive")]
+    [Authorize(Roles = "Company Executive")]
     public class ManagementController : Controller
     {
         private readonly UserManager<Employee> _userManager;
@@ -37,7 +37,7 @@ namespace HRApp.Controllers
         {
             return View();
         }
-        /*
+
         [HttpPost]
         public async Task<IActionResult> SendInvitation(SendInvitationViewModel model)
         {
@@ -62,8 +62,7 @@ namespace HRApp.Controllers
 
             return View(model);
         }
-        /*
-        /*
+
         private string GenerateRandomPassword()
         {
             var options = _userManager.Options.Password;
@@ -71,6 +70,5 @@ namespace HRApp.Controllers
             var password = passwordGenerator.GeneratePassword(options.RequiredLength);
             return password;
         }
-        */
     }
 }

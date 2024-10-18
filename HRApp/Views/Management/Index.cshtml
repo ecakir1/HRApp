@@ -2,15 +2,17 @@
     ViewData["Title"] = "Management";
 }
 
-<h2>Management</h2>
-
-<div>
-    <ul>
-        <li><a href="/Management/SendInvitation">Send Invitation</a></li>
-        <!-- Diğer başlıklar buraya eklenebilir -->
-    </ul>
-</div>
-
-<div id="content">
-    @RenderBody()
+<div class="row">
+    <div class="col-md-3">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a asp-controller="Management" asp-action="SendInvitation">Send Invitation</a>
+            </li>
+            <!-- Add more headlines as needed -->
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <!-- Content for the selected headline will be rendered here -->
+        @* You can include specific content here or render partial views *@
+    </div>
 </div>
