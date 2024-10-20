@@ -26,30 +26,33 @@
     <div id="education-section">
         @for (int i = 0; i < Model.Educations.Count; i++)
         {
-            <div class="form-group">
-                <label asp-for="@Model.Educations[i].School"></label>
-                <input asp-for="@Model.Educations[i].School" class="form-control" />
-                <span asp-validation-for="@Model.Educations[i].School" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Educations[i].Degree"></label>
-                <input asp-for="@Model.Educations[i].Degree" class="form-control" />
-                <span asp-validation-for="@Model.Educations[i].Degree" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Educations[i].FieldOfStudy"></label>
-                <input asp-for="@Model.Educations[i].FieldOfStudy" class="form-control" />
-                <span asp-validation-for="@Model.Educations[i].FieldOfStudy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Educations[i].StartDate"></label>
-                <input asp-for="@Model.Educations[i].StartDate" class="form-control" />
-                <span asp-validation-for="@Model.Educations[i].StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Educations[i].EndDate"></label>
-                <input asp-for="@Model.Educations[i].EndDate" class="form-control" />
-                <span asp-validation-for="@Model.Educations[i].EndDate" class="text-danger"></span>
+            <div class="education-group" data-index="@i">
+                <div class="form-group">
+                    <label asp-for="@Model.Educations[i].School"></label>
+                    <input asp-for="@Model.Educations[i].School" class="form-control" />
+                    <span asp-validation-for="@Model.Educations[i].School" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Educations[i].Degree"></label>
+                    <input asp-for="@Model.Educations[i].Degree" class="form-control" />
+                    <span asp-validation-for="@Model.Educations[i].Degree" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Educations[i].FieldOfStudy"></label>
+                    <input asp-for="@Model.Educations[i].FieldOfStudy" class="form-control" />
+                    <span asp-validation-for="@Model.Educations[i].FieldOfStudy" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Educations[i].StartDate"></label>
+                    <input asp-for="@Model.Educations[i].StartDate" class="form-control" />
+                    <span asp-validation-for="@Model.Educations[i].StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Educations[i].EndDate"></label>
+                    <input asp-for="@Model.Educations[i].EndDate" class="form-control" />
+                    <span asp-validation-for="@Model.Educations[i].EndDate" class="text-danger"></span>
+                </div>
+                <button type="button" class="btn btn-danger remove-education">Remove</button>
             </div>
         }
     </div>
@@ -61,30 +64,50 @@
     <script>
         document.getElementById('add-education').addEventListener('click', function () {
             var educationSection = document.getElementById('education-section');
-            var index = educationSection.children.length / 5;
+            var index = educationSection.children.length;
             var newEducation = `
-                        <div class="form-group">
-                            <label for="Educations_${index}__School">School</label>
-                            <input class="form-control" type="text" id="Educations_${index}__School" name="Educations[${index}].School" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Educations_${index}__Degree">Degree</label>
-                            <input class="form-control" type="text" id="Educations_${index}__Degree" name="Educations[${index}].Degree" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Educations_${index}__FieldOfStudy">Field Of Study</label>
-                            <input class="form-control" type="text" id="Educations_${index}__FieldOfStudy" name="Educations[${index}].FieldOfStudy" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Educations_${index}__StartDate">Start Date</label>
-                            <input class="form-control" type="date" id="Educations_${index}__StartDate" name="Educations[${index}].StartDate" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Educations_${index}__EndDate">End Date</label>
-                            <input class="form-control" type="date" id="Educations_${index}__EndDate" name="Educations[${index}].EndDate" />
+                        <div class="education-group" data-index="${index}">
+                            <div class="form-group">
+                                <label for="Educations_${index}__School">School</label>
+                                <input class="form-control" type="text" id="Educations_${index}__School" name="Educations[${index}].School" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Educations_${index}__Degree">Degree</label>
+                                <input class="form-control" type="text" id="Educations_${index}__Degree" name="Educations[${index}].Degree" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Educations_${index}__FieldOfStudy">Field Of Study</label>
+                                <input class="form-control" type="text" id="Educations_${index}__FieldOfStudy" name="Educations[${index}].FieldOfStudy" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Educations_${index}__StartDate">Start Date</label>
+                                <input class="form-control" type="date" id="Educations_${index}__StartDate" name="Educations[${index}].StartDate" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Educations_${index}__EndDate">End Date</label>
+                                <input class="form-control" type="date" id="Educations_${index}__EndDate" name="Educations[${index}].EndDate" />
+                            </div>
+                            <button type="button" class="btn btn-danger remove-education">Remove</button>
                         </div>
                     `;
             educationSection.insertAdjacentHTML('beforeend', newEducation);
+            attachRemoveEvent();
         });
+
+        function attachRemoveEvent() {
+            var removeButtons = document.querySelectorAll('.remove-education');
+            removeButtons.forEach(function (button) {
+                button.removeEventListener('click', removeEducation);
+                button.addEventListener('click', removeEducation);
+            });
+        }
+
+        function removeEducation(event) {
+            var educationGroup = event.target.closest('.education-group');
+            educationGroup.remove();
+        }
+
+        // Initial call to attach remove event to existing elements
+        attachRemoveEvent();
     </script>
 }

@@ -66,5 +66,31 @@ namespace HRApp.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        [Authorize(Policy = "FirstLogin")]
+        public async Task<IActionResult> RemoveEducation(int index)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var employeeDetail = user.EmployeeDetail;
+            if (employeeDetail == null || employeeDetail.Educations == null || index < 0 || index >= employeeDetail.Educations.Count())
+            {
+                return BadRequest("Invalid education index.");
+            }
+
+            var educationsList = employeeDetail.Educations.ToList();
+            educationsList.RemoveAt(index);
+            employeeDetail.Educations = educationsList;
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
