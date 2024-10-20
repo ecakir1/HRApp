@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HRApp.Models
 {
@@ -7,7 +6,7 @@ namespace HRApp.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email Addresses")]
-        public List<string> Emails { get; set; }
+        [Display(Name = "Email Address")]
+        public string Email { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using HRApp.DAL.Seed_Data;
 using HRApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,12 +15,27 @@ builder.Services.AddControllersWithViews();
 // Register the IEmailSender service
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+// Register the SmtpSettings configuration section
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+
 builder.Services.AddDbContext<HRManagementDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MsSQLConnectionString"));
 });
 
-builder.Services.AddIdentity<Employee, IdentityRole<Guid>>()
+//builder.Services.AddIdentity<Employee, IdentityRole<Guid>>()
+//    .AddEntityFrameworkStores<HRManagementDbContext>()
+//    .AddDefaultTokenProviders();
+
+builder.Services.AddIdentity<Employee, IdentityRole<Guid>>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredUniqueChars = 1;
+})
     .AddEntityFrameworkStores<HRManagementDbContext>()
     .AddDefaultTokenProviders();
 

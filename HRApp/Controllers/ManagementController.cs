@@ -10,6 +10,7 @@ using DAL.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using HRApp.Services;
 using GSF.Security.Cryptography;
+using System.ComponentModel.DataAnnotations;
 
 namespace HRApp.Controllers
 {
@@ -43,8 +44,34 @@ namespace HRApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                foreach (var email in model.Emails)
+                var email = model.Email;
+                if (!new EmailAddressAttribute().IsValid(email))
                 {
+                    ModelState.AddModelError("Email", $"The email address {email} is not valid.");
+                    return View(model);
+                }
+
+                var existingUser = await _userManager.FindByEmailAsync(email);
+                if (existingUser != null)
+                {
+                    // User already exists, generate a new password and send the invitation email
+                    var newPassword = GenerateRandomPassword();
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+                    var resetResult = await _userManager.ResetPasswordAsync(existingUser, token, newPassword);
+
+                    if (resetResult.Succeeded)
+                    {
+                        await _emailSender.SendEmailAsync(email, "Invitation to Join", $"Your username: {email}, Your new password: {newPassword}");
+                        ViewBag.Message = "Invitation sent successfully!";
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "An error occurred while resetting the password.");
+                    }
+                }
+                else
+                {
+                    // User does not exist, create the user and send the invitation email
                     var password = GenerateRandomPassword();
                     var user = new Employee { UserName = email, Email = email };
                     var result = await _userManager.CreateAsync(user, password);
@@ -53,10 +80,14 @@ namespace HRApp.Controllers
                     {
                         await _userManager.AddToRoleAsync(user, "Employee");
                         await _emailSender.SendEmailAsync(email, "Invitation to Join", $"Your username: {email}, Your password: {password}");
+                        ViewBag.Message = "Invitation sent successfully!";
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "An error occurred while creating the user.");
                     }
                 }
 
-                ViewBag.Message = "Invitations sent successfully!";
                 return View();
             }
 

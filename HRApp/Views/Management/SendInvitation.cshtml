@@ -8,9 +8,9 @@
 
 <form asp-action="SendInvitation" method="post">
     <div class="form-group">
-        <label asp-for="Emails" class="control-label"></label>
-        <input asp-for="Emails" class="form-control" />
-        <span asp-validation-for="Emails" class="text-danger"></span>
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
         <input type="submit" value="Send" class="btn btn-primary" />
@@ -29,3 +29,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
