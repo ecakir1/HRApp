@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,10 +23,6 @@ builder.Services.AddDbContext<HRManagementDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MsSQLConnectionString"));
 });
-
-//builder.Services.AddIdentity<Employee, IdentityRole<Guid>>()
-//    .AddEntityFrameworkStores<HRManagementDbContext>()
-//    .AddDefaultTokenProviders();
 
 builder.Services.AddIdentity<Employee, IdentityRole<Guid>>(options =>
 {
@@ -54,6 +51,23 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Account/Logout";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.SlidingExpiration = true;
+    options.Events.OnSigningIn = async context =>
+    {
+        var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<Employee>>();
+        var user = await userManager.GetUserAsync(context.Principal);
+        if (user != null && user.PasswordHash == user.SecurityStamp) // Assuming SecurityStamp is used to store the initial random password hash
+        {
+            var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+            claimsIdentity.AddClaim(new Claim("FirstLogin", "true"));
+        }
+    };
+});
+
+// Add authorization policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("FirstLogin", policy =>
+        policy.RequireClaim("FirstLogin", "true"));
 });
 
 var app = builder.Build();

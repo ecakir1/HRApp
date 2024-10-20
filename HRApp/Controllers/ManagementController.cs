@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using HRApp.Services;
 using GSF.Security.Cryptography;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace HRApp.Controllers
 {
@@ -61,6 +62,7 @@ namespace HRApp.Controllers
 
                     if (resetResult.Succeeded)
                     {
+                        await _userManager.AddClaimAsync(existingUser, new Claim("FirstLogin", "true"));
                         await _emailSender.SendEmailAsync(email, "Invitation to Join", $"Your username: {email}, Your new password: {newPassword}");
                         ViewBag.Message = "Invitation sent successfully!";
                     }
@@ -79,6 +81,7 @@ namespace HRApp.Controllers
                     if (result.Succeeded)
                     {
                         await _userManager.AddToRoleAsync(user, "Employee");
+                        await _userManager.AddClaimAsync(user, new Claim("FirstLogin", "true"));
                         await _emailSender.SendEmailAsync(email, "Invitation to Join", $"Your username: {email}, Your password: {password}");
                         ViewBag.Message = "Invitation sent successfully!";
                     }

@@ -24,6 +24,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Employee") && User.HasClaim(c => c.Type == "FirstLogin" && c.Value == "true"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
+                            </li>
+                        }
                         @if (User.IsInRole("Company Executive"))
                         {
                             <li class="nav-item">
