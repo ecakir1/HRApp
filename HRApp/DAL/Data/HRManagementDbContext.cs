@@ -7,25 +7,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Core
 {
-    public class HRManagementDbContext : IdentityDbContext<Employee, IdentityRole<Guid>,Guid>
+    public class HRManagementDbContext : IdentityDbContext<Employee, IdentityRole<Guid>, Guid>
     {
         public HRManagementDbContext(DbContextOptions<HRManagementDbContext> options) : base(options)
         {
-
-
-
         }
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeDetail> EmployeeDetails { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
-
         public DbSet<Expense> Expense { get; set; }
         public DbSet<ExpenseRequest> ExpenseRequests { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<CompanyHoliday> CompanyHolidays { get; set; }
         public DbSet<Event> Events { get; set; }
-
+        public DbSet<Education> Education { get; set; } // Add this line
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,11 +39,7 @@ namespace DAL.Core
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
             modelBuilder.ApplyConfiguration(new LeaveConfiguration());
 
-
             base.OnModelCreating(modelBuilder);
-
         }
-
     }
-
 }

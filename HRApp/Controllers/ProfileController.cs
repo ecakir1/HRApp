@@ -6,6 +6,7 @@ using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using DAL.Core;
 
 namespace HRApp.Controllers
 {
@@ -13,10 +14,12 @@ namespace HRApp.Controllers
     public class ProfileController : Controller
     {
         private readonly UserManager<Employee> _userManager;
+        private readonly HRManagementDbContext _context;
 
-        public ProfileController(UserManager<Employee> userManager)
+        public ProfileController(UserManager<Employee> userManager, HRManagementDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         [Authorize(Policy = "FirstLogin")]
@@ -74,6 +77,7 @@ namespace HRApp.Controllers
                         Experiences = model.Experiences
                     };
                     user.EmployeeDetail = employeeDetail;
+                    _context.EmployeeDetails.Add(employeeDetail); // Add this line to add the EmployeeDetail entity to the DbContext
                 }
                 else
                 {
@@ -82,9 +86,11 @@ namespace HRApp.Controllers
                     employeeDetail.Position = model.Position;
                     employeeDetail.Educations = model.Educations;
                     employeeDetail.Experiences = model.Experiences;
+                    _context.EmployeeDetails.Update(employeeDetail); // Ensure the EmployeeDetail entity is tracked and updated
                 }
 
-                await _userManager.UpdateAsync(user);
+                await _context.SaveChangesAsync(); // Save changes to the database
+                await _userManager.UpdateAsync(user); // Ensure the user is updated in the UserManager
                 ViewBag.Message = "Profile updated successfully!";
             }
             return View(model);
@@ -123,6 +129,8 @@ namespace HRApp.Controllers
                         Educations = new List<Education>()
                     };
                     user.EmployeeDetail = employeeDetail;
+                    _context.EmployeeDetails.Add(employeeDetail); // Add this line to add the EmployeeDetail entity to the DbContext
+                    await _context.SaveChangesAsync(); // Save changes to the database to ensure EmployeeDetailId is generated
                 }
 
                 var education = new Education
@@ -136,8 +144,9 @@ namespace HRApp.Controllers
                     EmployeeDetailId = employeeDetail.EmployeeDetailId
                 };
 
-                employeeDetail.Educations.Add(education);
-                await _userManager.UpdateAsync(user);
+                _context.Education.Add(education); // Add this line to add the entity to the DbContext
+                await _context.SaveChangesAsync(); // Add this line to save changes to the database
+
                 ViewBag.Message = "Education added successfully!";
 
                 return RedirectToAction(nameof(Index));
