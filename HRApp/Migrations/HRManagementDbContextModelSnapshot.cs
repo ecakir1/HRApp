@@ -274,7 +274,6 @@ namespace HRApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -282,7 +281,6 @@ namespace HRApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Department")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -297,7 +295,8 @@ namespace HRApp.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("RemainingLeaveDays")
+                    b.Property<int?>("RemainingLeaveDays")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0);

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HRApp.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateCompanyConfiguration : Migration
+    public partial class InitHRApp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -177,8 +177,8 @@ namespace HRApp.Migrations
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Position = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Department = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Department = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     RemainingLeaveDays = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created_At = table.Column<DateTime>(type: "datetime2", nullable: false),

@@ -6,6 +6,13 @@
 
 <h2>Profile</h2>
 
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+    </div>
+}
+
 <form asp-action="Index" method="post">
     <div class="form-group">
         <label asp-for="Birthdate"></label>
@@ -56,44 +63,12 @@
             </div>
         }
     </div>
-    <button type="button" id="add-education" class="btn btn-primary">Add Education</button>
+    <a asp-action="AddEducation" class="btn btn-primary">Add Education</a>
     <button type="submit" class="btn btn-success">Save</button>
 </form>
 
 @section Scripts {
     <script>
-        document.getElementById('add-education').addEventListener('click', function () {
-            var educationSection = document.getElementById('education-section');
-            var index = educationSection.children.length;
-            var newEducation = `
-                        <div class="education-group" data-index="${index}">
-                            <div class="form-group">
-                                <label for="Educations_${index}__School">School</label>
-                                <input class="form-control" type="text" id="Educations_${index}__School" name="Educations[${index}].School" />
-                            </div>
-                            <div class="form-group">
-                                <label for="Educations_${index}__Degree">Degree</label>
-                                <input class="form-control" type="text" id="Educations_${index}__Degree" name="Educations[${index}].Degree" />
-                            </div>
-                            <div class="form-group">
-                                <label for="Educations_${index}__FieldOfStudy">Field Of Study</label>
-                                <input class="form-control" type="text" id="Educations_${index}__FieldOfStudy" name="Educations[${index}].FieldOfStudy" />
-                            </div>
-                            <div class="form-group">
-                                <label for="Educations_${index}__StartDate">Start Date</label>
-                                <input class="form-control" type="date" id="Educations_${index}__StartDate" name="Educations[${index}].StartDate" />
-                            </div>
-                            <div class="form-group">
-                                <label for="Educations_${index}__EndDate">End Date</label>
-                                <input class="form-control" type="date" id="Educations_${index}__EndDate" name="Educations[${index}].EndDate" />
-                            </div>
-                            <button type="button" class="btn btn-danger remove-education">Remove</button>
-                        </div>
-                    `;
-            educationSection.insertAdjacentHTML('beforeend', newEducation);
-            attachRemoveEvent();
-        });
-
         function attachRemoveEvent() {
             var removeButtons = document.querySelectorAll('.remove-education');
             removeButtons.forEach(function (button) {

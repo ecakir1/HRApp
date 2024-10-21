@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRApp.Migrations
 {
     [DbContext(typeof(HRManagementDbContext))]
-    [Migration("20241013113705_UpdateCompanyConfiguration")]
-    partial class UpdateCompanyConfiguration
+    [Migration("20241020154527_InitHRApp")]
+    partial class InitHRApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -277,7 +277,6 @@ namespace HRApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -285,7 +284,6 @@ namespace HRApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Department")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -300,7 +298,8 @@ namespace HRApp.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("RemainingLeaveDays")
+                    b.Property<int?>("RemainingLeaveDays")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0);

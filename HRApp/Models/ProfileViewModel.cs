@@ -7,13 +7,19 @@ namespace HRApp.Models
 {
     public class ProfileViewModel
     {
-        [DataType(DataType.Date)]
+        [Required]
         public DateTime Birthdate { get; set; }
 
+        [Required]
+        [StringLength(100)]
         public string Address { get; set; }
 
+        [Required]
+        [StringLength(50)]
         public string Position { get; set; }
 
         public List<Education> Educations { get; set; } = new List<Education>();
+
+        public List<Experience> Experiences { get; set; } = new List<Experience>();
     }
 }
