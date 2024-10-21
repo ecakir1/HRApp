@@ -107,6 +107,7 @@ namespace HRApp.Controllers
             return View(model);
         }
 
+
         [HttpGet]
         [Authorize(Policy = "FirstLogin")]
         public IActionResult AddEducation()

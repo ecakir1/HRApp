@@ -12,6 +12,8 @@ using HRApp.Services;
 using GSF.Security.Cryptography;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using DAL.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRApp.Controllers
 {
@@ -21,12 +23,14 @@ namespace HRApp.Controllers
         private readonly UserManager<Employee> _userManager;
         private readonly SignInManager<Employee> _signInManager;
         private readonly HRApp.Services.IEmailSender _emailSender;
+        private readonly HRManagementDbContext _context;
 
-        public ManagementController(UserManager<Employee> userManager, SignInManager<Employee> signInManager, HRApp.Services.IEmailSender emailSender)
+        public ManagementController(UserManager<Employee> userManager, SignInManager<Employee> signInManager, HRApp.Services.IEmailSender emailSender, HRManagementDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -95,6 +99,21 @@ namespace HRApp.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EmployeeDetails()
+        {
+            var employees = await _context.Employees
+                .Include(e => e.EmployeeDetail)
+                .ThenInclude(ed => ed.Educations)
+                .Include(e => e.EmployeeDetail)
+                .ThenInclude(ed => ed.Experiences)
+                .Include(e => e.EmployeeDetail)
+                .ThenInclude(ed => ed.Certifications)
+                .ToListAsync();
+
+            return View(employees);
         }
 
         private string GenerateRandomPassword()

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<DAL.Models.Employee>
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h2>Employee Details</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Birthdate</th>
+            <th>Address</th>
+            <th>Position</th>
+            <th>Educations</th>
+            <th>Experiences</th>
+            <th>Certifications</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.UserName</td>
+                <td>@employee.EmployeeDetail?.Birthdate.ToShortDateString()</td>
+                <td>@employee.EmployeeDetail?.Address</td>
+                <td>@employee.EmployeeDetail?.Position</td>
+                <td>
+                    @foreach (var education in employee.EmployeeDetail?.Educations ?? Enumerable.Empty<DAL.Models.Education>())
+                    {
+                        <p>@education.School - @education.Degree</p>
+                    }
+                </td>
+                <td>
+                    @foreach (var experience in employee.EmployeeDetail?.Experiences ?? Enumerable.Empty<DAL.Models.Experience>())
+                    {
+                        <p>@experience.CompanyName - @experience.Position</p>
+                    }
+                </td>
+                <td>
+                    @foreach (var certification in employee.EmployeeDetail?.Certifications ?? Enumerable.Empty<DAL.Models.Certification>())
+                    {
+                        <p>@certification.CertificationName - @certification.CertificationProvider</p>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
