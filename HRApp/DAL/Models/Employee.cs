@@ -19,7 +19,8 @@ namespace DAL.Models
         public Guid? CompanyId { get; set; }
         public Company? Company { get; set; }
         public IEnumerable<Expense> Expense { get; set; }
-        [NotMapped]
+        
+        //[NotMapped]
         public virtual EmployeeDetail EmployeeDetail { get; set; }
         public virtual IEnumerable<LeaveRequest> LeaveRequests { get; set; }
         public virtual IEnumerable<ExpenseRequest> ExpenseRequests { get; set; }

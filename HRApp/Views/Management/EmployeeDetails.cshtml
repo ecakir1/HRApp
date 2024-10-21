@@ -16,6 +16,7 @@
             <th>Educations</th>
             <th>Experiences</th>
             <th>Certifications</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -43,6 +44,9 @@
                     {
                         <p>@certification.CertificationName - @certification.CertificationProvider</p>
                     }
+                </td>
+                <td>
+                    <a asp-action="EditEmployee" asp-route-id="@employee.Id" class="btn btn-primary">Edit</a>
                 </td>
             </tr>
         }

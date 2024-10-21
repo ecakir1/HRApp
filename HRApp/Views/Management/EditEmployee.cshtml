@@ -1,0 +1,38 @@
+﻿@model DAL.Models.Employee
+
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<h2>Edit Employee</h2>
+
+<form asp-action="UpdateEmployee" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeDetail.Birthdate"></label>
+        <input asp-for="EmployeeDetail.Birthdate" class="form-control" />
+        <span asp-validation-for="EmployeeDetail.Birthdate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeDetail.Address"></label>
+        <input asp-for="EmployeeDetail.Address" class="form-control" />
+        <span asp-validation-for="EmployeeDetail.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeDetail.Position"></label>
+        <input asp-for="EmployeeDetail.Position" class="form-control" />
+        <span asp-validation-for="EmployeeDetail.Position" class="text-danger"></span>
+    </div>
+    <!-- Add more fields as necessary -->
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
