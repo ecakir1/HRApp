@@ -10,6 +10,6 @@
         public Guid EmployeeDetailId { get; set; }
         public EmployeeDetail EmployeeDetail { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

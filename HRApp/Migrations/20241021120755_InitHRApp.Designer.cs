@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRApp.Migrations
 {
     [DbContext(typeof(HRManagementDbContext))]
-    [Migration("20241021102543_InitHRApp")]
+    [Migration("20241021120755_InitHRApp")]
     partial class InitHRApp
     {
         /// <inheritdoc />
@@ -402,21 +402,24 @@ namespace HRApp.Migrations
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<Guid>("EmployeeDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Position")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -425,7 +428,7 @@ namespace HRApp.Migrations
 
                     b.HasIndex("EmployeeDetailId");
 
-                    b.ToTable("Experience");
+                    b.ToTable("Experiences", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.LeaveRequest", b =>
@@ -785,7 +788,7 @@ namespace HRApp.Migrations
                     b.HasOne("DAL.Models.Company", "Company")
                         .WithMany("Expenses")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DAL.Models.Employee", "Employee")

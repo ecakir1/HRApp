@@ -28,6 +28,8 @@ namespace HRApp.Controllers
             var user = await _userManager.Users
                 .Include(u => u.EmployeeDetail)
                 .ThenInclude(ed => ed.Educations)
+                .Include(u => u.EmployeeDetail)
+                .ThenInclude(ed => ed.Experiences)
                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user == null)
@@ -56,6 +58,8 @@ namespace HRApp.Controllers
                 var user = await _userManager.Users
                     .Include(u => u.EmployeeDetail)
                     .ThenInclude(ed => ed.Educations)
+                    .Include(u => u.EmployeeDetail)
+                    .ThenInclude(ed => ed.Experiences)
                     .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
                 if (user == null)
@@ -148,6 +152,64 @@ namespace HRApp.Controllers
                 await _context.SaveChangesAsync(); // Add this line to save changes to the database
 
                 ViewBag.Message = "Education added successfully!";
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "FirstLogin")]
+        public IActionResult AddExperience()
+        {
+            return View(new ExperienceViewModel());
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "FirstLogin")]
+        public async Task<IActionResult> AddExperience(ExperienceViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.Users
+                    .Include(u => u.EmployeeDetail)
+                    .ThenInclude(ed => ed.Experiences)
+                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                var employeeDetail = user.EmployeeDetail;
+                if (employeeDetail == null)
+                {
+                    employeeDetail = new EmployeeDetail
+                    {
+                        EmployeeDetailId = Guid.NewGuid(),
+                        EmployeeId = user.Id,
+                        Experiences = new List<Experience>()
+                    };
+                    user.EmployeeDetail = employeeDetail;
+                    _context.EmployeeDetails.Add(employeeDetail); // Add this line to add the EmployeeDetail entity to the DbContext
+                    await _context.SaveChangesAsync(); // Save changes to the database to ensure EmployeeDetailId is generated
+                }
+
+                var experience = new Experience
+                {
+                    ExperienceId = Guid.NewGuid(),
+                    CompanyName = model.CompanyName,
+                    Position = model.Position,
+                    Description = model.Description,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    EmployeeDetailId = employeeDetail.EmployeeDetailId
+                };
+
+                _context.Experiences.Add(experience); // Add this line to add the entity to the DbContext
+                await _context.SaveChangesAsync(); // Add this line to save changes to the database
+
+                ViewBag.Message = "Experience added successfully!";
 
                 return RedirectToAction(nameof(Index));
             }

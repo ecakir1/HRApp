@@ -340,7 +340,7 @@ namespace HRApp.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -389,22 +389,22 @@ namespace HRApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Experience",
+                name: "Experiences",
                 columns: table => new
                 {
                     ExperienceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     EmployeeDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Experience", x => x.ExperienceId);
+                    table.PrimaryKey("PK_Experiences", x => x.ExperienceId);
                     table.ForeignKey(
-                        name: "FK_Experience_EmployeeDetails_EmployeeDetailId",
+                        name: "FK_Experiences_EmployeeDetails_EmployeeDetailId",
                         column: x => x.EmployeeDetailId,
                         principalTable: "EmployeeDetails",
                         principalColumn: "EmployeeDetailId",
@@ -508,8 +508,8 @@ namespace HRApp.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Experience_EmployeeDetailId",
-                table: "Experience",
+                name: "IX_Experiences_EmployeeDetailId",
+                table: "Experiences",
                 column: "EmployeeDetailId");
 
             migrationBuilder.CreateIndex(
@@ -596,7 +596,7 @@ namespace HRApp.Migrations
                 name: "Expenses");
 
             migrationBuilder.DropTable(
-                name: "Experience");
+                name: "Experiences");
 
             migrationBuilder.DropTable(
                 name: "LeaveRequests");

@@ -29,6 +29,7 @@
         <input asp-for="Position" class="form-control" />
         <span asp-validation-for="Position" class="text-danger"></span>
     </div>
+
     <h3>Education</h3>
     <div id="education-section">
         @for (int i = 0; i < Model.Educations.Count; i++)
@@ -64,16 +65,59 @@
         }
     </div>
     <a asp-action="AddEducation" class="btn btn-primary">Add Education</a>
+
+    <h3>Experience</h3>
+    <div id="experience-section">
+        @for (int i = 0; i < Model.Experiences.Count; i++)
+        {
+            <div class="experience-group" data-index="@i">
+                <div class="form-group">
+                    <label asp-for="@Model.Experiences[i].CompanyName"></label>
+                    <input asp-for="@Model.Experiences[i].CompanyName" class="form-control" />
+                    <span asp-validation-for="@Model.Experiences[i].CompanyName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Experiences[i].Position"></label>
+                    <input asp-for="@Model.Experiences[i].Position" class="form-control" />
+                    <span asp-validation-for="@Model.Experiences[i].Position" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Experiences[i].Description"></label>
+                    <input asp-for="@Model.Experiences[i].Description" class="form-control" />
+                    <span asp-validation-for="@Model.Experiences[i].Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Experiences[i].StartDate"></label>
+                    <input asp-for="@Model.Experiences[i].StartDate" class="form-control" />
+                    <span asp-validation-for="@Model.Experiences[i].StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Experiences[i].EndDate"></label>
+                    <input asp-for="@Model.Experiences[i].EndDate" class="form-control" />
+                    <span asp-validation-for="@Model.Experiences[i].EndDate" class="text-danger"></span>
+                </div>
+                <button type="button" class="btn btn-danger remove-experience">Remove</button>
+            </div>
+        }
+    </div>
+    <a asp-action="AddExperience" class="btn btn-primary">Add Experience</a>
+
     <button type="submit" class="btn btn-success">Save</button>
 </form>
 
 @section Scripts {
     <script>
         function attachRemoveEvent() {
-            var removeButtons = document.querySelectorAll('.remove-education');
-            removeButtons.forEach(function (button) {
+            var removeEducationButtons = document.querySelectorAll('.remove-education');
+            removeEducationButtons.forEach(function (button) {
                 button.removeEventListener('click', removeEducation);
                 button.addEventListener('click', removeEducation);
+            });
+
+            var removeExperienceButtons = document.querySelectorAll('.remove-experience');
+            removeExperienceButtons.forEach(function (button) {
+                button.removeEventListener('click', removeExperience);
+                button.addEventListener('click', removeExperience);
             });
         }
 
@@ -82,7 +126,13 @@
             educationGroup.remove();
         }
 
+        function removeExperience(event) {
+            var experienceGroup = event.target.closest('.experience-group');
+            experienceGroup.remove();
+        }
+
         // Initial call to attach remove event to existing elements
         attachRemoveEvent();
     </script>
 }
+

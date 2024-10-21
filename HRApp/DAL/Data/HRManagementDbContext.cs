@@ -21,7 +21,9 @@ namespace DAL.Core
         public DbSet<Company> Companies { get; set; }
         public DbSet<CompanyHoliday> CompanyHolidays { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<Education> Education { get; set; } // Add this line
+        public DbSet<Education> Education { get; set; }
+        public DbSet<Experience> Experiences { get; set; } // Add this line
+        public DbSet<Certification> Certifications { get; set; } // Add this line
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,7 +38,7 @@ namespace DAL.Core
 
             modelBuilder.ApplyConfiguration(new CertificationConfiguration());
             modelBuilder.ApplyConfiguration(new EducationConfiguration());
-            modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
+            modelBuilder.ApplyConfiguration(new ExperienceConfiguration()); // Add this line
             modelBuilder.ApplyConfiguration(new LeaveConfiguration());
 
             base.OnModelCreating(modelBuilder);
