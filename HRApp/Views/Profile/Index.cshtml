@@ -102,6 +102,37 @@
     </div>
     <a asp-action="AddExperience" class="btn btn-primary">Add Experience</a>
 
+    <h3>Certifications</h3>
+    <div id="certification-section">
+        @for (int i = 0; i < Model.Certifications.Count; i++)
+        {
+            <div class="certification-group" data-index="@i">
+                <div class="form-group">
+                    <label asp-for="@Model.Certifications[i].CertificationName"></label>
+                    <input asp-for="@Model.Certifications[i].CertificationName" class="form-control" />
+                    <span asp-validation-for="@Model.Certifications[i].CertificationName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Certifications[i].CertificationProvider"></label>
+                    <input asp-for="@Model.Certifications[i].CertificationProvider" class="form-control" />
+                    <span asp-validation-for="@Model.Certifications[i].CertificationProvider" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Certifications[i].QualificationId"></label>
+                    <input asp-for="@Model.Certifications[i].QualificationId" class="form-control" />
+                    <span asp-validation-for="@Model.Certifications[i].QualificationId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Certifications[i].CertificationDate"></label>
+                    <input asp-for="@Model.Certifications[i].CertificationDate" class="form-control" />
+                    <span asp-validation-for="@Model.Certifications[i].CertificationDate" class="text-danger"></span>
+                </div>
+                <button type="button" class="btn btn-danger remove-certification">Remove</button>
+            </div>
+        }
+    </div>
+    <a asp-action="AddCertification" class="btn btn-primary">Add Certification</a>
+
     <button type="submit" class="btn btn-success">Save</button>
 </form>
 
@@ -119,6 +150,12 @@
                 button.removeEventListener('click', removeExperience);
                 button.addEventListener('click', removeExperience);
             });
+
+            var removeCertificationButtons = document.querySelectorAll('.remove-certification');
+            removeCertificationButtons.forEach(function (button) {
+                button.removeEventListener('click', removeCertification);
+                button.addEventListener('click', removeCertification);
+            });
         }
 
         function removeEducation(event) {
@@ -131,8 +168,12 @@
             experienceGroup.remove();
         }
 
+        function removeCertification(event) {
+            var certificationGroup = event.target.closest('.certification-group');
+            certificationGroup.remove();
+        }
+
         // Initial call to attach remove event to existing elements
         attachRemoveEvent();
     </script>
 }
-

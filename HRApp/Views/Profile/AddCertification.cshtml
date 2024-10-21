@@ -1,0 +1,31 @@
+﻿@model HRApp.Models.CertificationViewModel
+
+@{
+    ViewData["Title"] = "Certification";
+}
+
+<h2>Add Certification</h2>
+
+<form asp-action="AddCertification" method="post">
+    <div class="form-group">
+        <label asp-for="CertificationName"></label>
+        <input asp-for="CertificationName" class="form-control" />
+        <span asp-validation-for="CertificationName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CertificationProvider"></label>
+        <input asp-for="CertificationProvider" class="form-control" />
+        <span asp-validation-for="CertificationProvider" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="QualificationId"></label>
+        <input asp-for="QualificationId" class="form-control" />
+        <span asp-validation-for="QualificationId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CertificationDate"></label>
+        <input asp-for="CertificationDate" class="form-control" />
+        <span asp-validation-for="CertificationDate" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Add Certification</button>
+</form>

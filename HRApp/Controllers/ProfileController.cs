@@ -30,6 +30,8 @@ namespace HRApp.Controllers
                 .ThenInclude(ed => ed.Educations)
                 .Include(u => u.EmployeeDetail)
                 .ThenInclude(ed => ed.Experiences)
+                .Include(u => u.EmployeeDetail)
+                .ThenInclude(ed => ed.Certifications) // Include Certifications
                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user == null)
@@ -44,7 +46,8 @@ namespace HRApp.Controllers
                 Address = employeeDetail.Address,
                 Position = employeeDetail.Position,
                 Educations = employeeDetail.Educations?.ToList() ?? new List<Education>(),
-                Experiences = employeeDetail.Experiences?.ToList() ?? new List<Experience>()
+                Experiences = employeeDetail.Experiences?.ToList() ?? new List<Experience>(),
+                Certifications = employeeDetail.Certifications?.ToList() ?? new List<Certification>() // Add Certifications
             };
             return View(model);
         }
@@ -60,6 +63,8 @@ namespace HRApp.Controllers
                     .ThenInclude(ed => ed.Educations)
                     .Include(u => u.EmployeeDetail)
                     .ThenInclude(ed => ed.Experiences)
+                    .Include(u => u.EmployeeDetail)
+                    .ThenInclude(ed => ed.Certifications) // Include Certifications
                     .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
                 if (user == null)
@@ -78,7 +83,8 @@ namespace HRApp.Controllers
                         Address = model.Address,
                         Position = model.Position,
                         Educations = model.Educations,
-                        Experiences = model.Experiences
+                        Experiences = model.Experiences,
+                        Certifications = model.Certifications // Add Certifications
                     };
                     user.EmployeeDetail = employeeDetail;
                     _context.EmployeeDetails.Add(employeeDetail); // Add this line to add the EmployeeDetail entity to the DbContext
@@ -90,6 +96,7 @@ namespace HRApp.Controllers
                     employeeDetail.Position = model.Position;
                     employeeDetail.Educations = model.Educations;
                     employeeDetail.Experiences = model.Experiences;
+                    employeeDetail.Certifications = model.Certifications; // Add Certifications
                     _context.EmployeeDetails.Update(employeeDetail); // Ensure the EmployeeDetail entity is tracked and updated
                 }
 
@@ -210,6 +217,63 @@ namespace HRApp.Controllers
                 await _context.SaveChangesAsync(); // Add this line to save changes to the database
 
                 ViewBag.Message = "Experience added successfully!";
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "FirstLogin")]
+        public IActionResult AddCertification()
+        {
+            return View(new CertificationViewModel());
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "FirstLogin")]
+        public async Task<IActionResult> AddCertification(CertificationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.Users
+                    .Include(u => u.EmployeeDetail)
+                    .ThenInclude(ed => ed.Certifications)
+                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                var employeeDetail = user.EmployeeDetail;
+                if (employeeDetail == null)
+                {
+                    employeeDetail = new EmployeeDetail
+                    {
+                        EmployeeDetailId = Guid.NewGuid(),
+                        EmployeeId = user.Id,
+                        Certifications = new List<Certification>()
+                    };
+                    user.EmployeeDetail = employeeDetail;
+                    _context.EmployeeDetails.Add(employeeDetail); // Add this line to add the EmployeeDetail entity to the DbContext
+                    await _context.SaveChangesAsync(); // Save changes to the database to ensure EmployeeDetailId is generated
+                }
+
+                var certification = new Certification
+                {
+                    CertificationId = Guid.NewGuid(),
+                    CertificationName = model.CertificationName,
+                    CertificationProvider = model.CertificationProvider,
+                    QualificationId = model.QualificationId,
+                    CertificationDate = model.CertificationDate,
+                    EmployeeDetailId = employeeDetail.EmployeeDetailId
+                };
+
+                _context.Certifications.Add(certification); // Add this line to add the entity to the DbContext
+                await _context.SaveChangesAsync(); // Add this line to save changes to the database
+
+                ViewBag.Message = "Certification added successfully!";
 
                 return RedirectToAction(nameof(Index));
             }

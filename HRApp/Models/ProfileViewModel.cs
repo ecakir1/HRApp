@@ -21,5 +21,6 @@ namespace HRApp.Models
         public List<Education> Educations { get; set; } = new List<Education>();
 
         public List<Experience> Experiences { get; set; } = new List<Experience>();
+        public List<Certification> Certifications { get; set; } = new List<Certification>();
     }
 }
